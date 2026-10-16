@@ -93,7 +93,7 @@ Scripts/             构建脚本、插件集成及配套资源
 | host / 工具链缓存 | 按机型、最终配置、相关源码与 runner 环境精确匹配；命中后不重复上传 |
 | hostpkg 缓存 | 独立保存软件包宿主工具，额外校验 feeds、插件、配置与集成脚本 |
 | MTK 服务 | 不集成 Mesh；7DR7299 MTK 仅保留 PassWall / Xray 代理，移除 daed / honk / EasyTier 及其独立编译器 |
-| 7DR7299 MTK 精简 | 移除 Samba / ksmbd / NFS / FTP、磁盘分区与健康工具、存储和 USB 音频扩展；保留 USB 控制器与 USB 网卡驱动 |
+| 7DR7299 MTK 精简 | 移除 Samba / ksmbd / NFS / FTP、磁盘分区与健康工具、非必需存储和 USB 音频扩展；保留 USB 控制器、USB 网卡及闭源 Wi-Fi / TurboACC 必需的 blkid、bonding、Btrfs 内核模块 |
 | 双 WAN 与 WireGuard | 7DR7299 MTK 已选中 mwan3 和 WireGuard 内核、工具与 LuCI；首次启动后按实际端口、运营商与密钥配置 |
 
 临时选包示例（可多行，也可用字面量 `\n` 分隔）：

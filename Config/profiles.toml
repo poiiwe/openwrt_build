@@ -91,6 +91,10 @@ config = "Config/TPLINK-7DR7299-MTK.txt"
 
 # 必选配置
 required = [
+  # 闭源 Wi-Fi / TurboACC 的基础依赖
+  "PACKAGE_blkid",
+  "PACKAGE_kmod-bonding",
+  "PACKAGE_kmod-fs-btrfs",
   "PACKAGE_luci-app-mwan3",
   "PACKAGE_mwan3",
   "PACKAGE_luci-proto-wireguard",
@@ -134,6 +138,9 @@ required_image_packages = [
   "luci-proto-wireguard",
   "wireguard-tools",
   "kmod-wireguard",
+  "blkid",
+  "kmod-bonding",
+  "kmod-fs-btrfs",
   "mt798x-2p5g-phy-firmware-internal",
   "mt7988-wo-firmware",
   "kmod-mt798x-2p5g-phy",
