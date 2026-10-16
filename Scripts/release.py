@@ -31,7 +31,7 @@ def context():
     if (run['path'] != '.github/workflows/build.yml'
             or run['head_repository']['full_name'] != repository
             or run['head_branch'] != repo['default_branch']
-            or run['event'] not in ('workflow_dispatch', 'schedule')):
+            or run['event'] not in ('workflow_dispatch', 'schedule', 'push')):
         raise ValueError('Only trusted default-branch firmware builds may be published')
     return repository, repo, run
 

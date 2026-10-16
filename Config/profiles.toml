@@ -91,6 +91,11 @@ config = "Config/TPLINK-7DR7299-MTK.txt"
 
 # 必选配置
 required = [
+  "PACKAGE_luci-app-mwan3",
+  "PACKAGE_mwan3",
+  "PACKAGE_luci-proto-wireguard",
+  "PACKAGE_wireguard-tools",
+  "PACKAGE_kmod-wireguard",
   "PACKAGE_mt798x-2p5g-phy-firmware-internal",
   "PACKAGE_mt7988-wo-firmware",
   "PACKAGE_kmod-mt798x-2p5g-phy",
@@ -99,7 +104,6 @@ required = [
   "PACKAGE_swconfig",
   "PACKAGE_kmod-sfp",
   "PACKAGE_kmod-usb3",
-  "PACKAGE_automount",
   "PACKAGE_wireless-regdb",
   "PACKAGE_kmod-mediatek_hnat",
   "PACKAGE_kmod-warp",
@@ -125,6 +129,11 @@ required = [
 
 # 固件必需包
 required_image_packages = [
+  "luci-app-mwan3",
+  "mwan3",
+  "luci-proto-wireguard",
+  "wireguard-tools",
+  "kmod-wireguard",
   "mt798x-2p5g-phy-firmware-internal",
   "mt7988-wo-firmware",
   "kmod-mt798x-2p5g-phy",
@@ -133,7 +142,6 @@ required_image_packages = [
   "swconfig",
   "kmod-sfp",
   "kmod-usb3",
-  "automount",
   "wireless-regdb",
   "kmod-mediatek_hnat",
   "kmod-warp",

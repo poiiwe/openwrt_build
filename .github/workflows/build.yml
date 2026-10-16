@@ -1,12 +1,18 @@
 name: Build firmware
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/build.yml'
+      - 'Config/**'
+      - 'Scripts/**'
   workflow_dispatch:
     inputs:
       profile:
         description: 编译机型
         type: choice
-        default: all
+        default: 7dr7299-mtk
         options: [all, xiaomi-be6500, tenda-be12-pro, s20p-mt76, s20p-mtk, x86-64, 7dr7299-mt76, 7dr7299-mtk]
       source_commit:
         description: 可选上游完整提交 SHA（仅单机型）
@@ -48,7 +54,7 @@ jobs:
         id: plan
         env:
           GH_TOKEN: ${{ github.token }}
-          PROFILE: ${{ inputs.profile || 'all' }}
+          PROFILE: ${{ inputs.profile || '7dr7299-mtk' }}
           SOURCE_COMMIT: ${{ inputs.source_commit }}
           FORCE: ${{ inputs.force }}
           EVENT_NAME: ${{ github.event_name }}
@@ -239,7 +245,7 @@ jobs:
     if: >-
       ${{ !cancelled() && needs.plan.result == 'success' &&
           needs.plan.outputs.has_builds == 'true' &&
-          (github.event_name == 'schedule' || inputs.publish == true) }}
+          (github.event_name == 'schedule' || github.event_name == 'push' || inputs.publish == true) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -257,7 +263,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           SOURCE_RUN_ID: ${{ github.run_id }}
-          PROFILE: ${{ inputs.profile || 'all' }}
+          PROFILE: ${{ inputs.profile || '7dr7299-mtk' }}
         run: python3 Scripts/release.py plan
   publish:
     name: ${{ matrix.profile }} / publish

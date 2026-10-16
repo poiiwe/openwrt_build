@@ -4,10 +4,10 @@
 
 多机型支持 · 自动构建 · 独立发布
 
-[![Build](https://github.com/WoChen5770/openwrt_build/actions/workflows/build.yml/badge.svg)](https://github.com/WoChen5770/openwrt_build/actions/workflows/build.yml)
-[![Release](https://img.shields.io/github/v/release/WoChen5770/openwrt_build?style=flat&color=2563eb)](https://github.com/WoChen5770/openwrt_build/releases)
+[![Build](https://github.com/poiiwe/openwrt_build/actions/workflows/build.yml/badge.svg)](https://github.com/poiiwe/openwrt_build/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/poiiwe/openwrt_build?style=flat&color=2563eb)](https://github.com/poiiwe/openwrt_build/releases)
 
-[下载固件](https://github.com/WoChen5770/openwrt_build/releases) · [在线构建](https://github.com/WoChen5770/openwrt_build/actions/workflows/build.yml) · [自定义配置](#自定义)
+[下载固件](https://github.com/poiiwe/openwrt_build/releases) · [在线构建](https://github.com/poiiwe/openwrt_build/actions/workflows/build.yml) · [自定义配置](#自定义)
 
 </div>
 
@@ -20,7 +20,7 @@
 | 超级网关S20P · MT76 | 开源无线 · Mesh · BBR / fq<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [VIKINGYFY / owrt](https://github.com/VIKINGYFY/immortalwrt/tree/owrt) |
 | 超级网关S20P · MTK | 闭源无线 · HNAT / WARP · TurboACC / eQoS<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [chasey-dev / 25.12](https://github.com/chasey-dev/immortalwrt-mt798x-rebase/tree/25.12) |
 | TL-7DR7299 · MT76 | 开源无线 · Mesh / DAWN · BBR / fq<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [VIKINGYFY / owrt](https://github.com/VIKINGYFY/immortalwrt/tree/owrt) |
-| TL-7DR7299 · MTK | 闭源无线 · HNAT / WARP · TurboACC / eQoS<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [padavanonly / 6.6-mtwifi](https://github.com/padavanonly/immortalwrt-mt798x-6.6/tree/mt798x-mt799x-6.6-mtwifi) |
+| TL-7DR7299 · MTK（默认） | 闭源无线 · HNAT / WARP · TurboACC / eQoS<br>双 WAN（mwan3）· WireGuard · PassWall（Xray-only）· AdGuard Home | [padavanonly / 6.6-mtwifi](https://github.com/padavanonly/immortalwrt-mt798x-6.6/tree/mt798x-mt799x-6.6-mtwifi) |
 | x86-64 | BBR · BIOS / UEFI / VMDK<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [VIKINGYFY / owrt](https://github.com/VIKINGYFY/immortalwrt/tree/owrt) |
 
 ## 默认设置
@@ -39,8 +39,9 @@ BE6500、BE12 Pro、S20P MT76、7DR7299 MT76 默认启用上游 BBR、`fq` 和 `
 
 | 项目 | 说明 |
 | :--- | :--- |
-| 手动构建 | [Run workflow](https://github.com/WoChen5770/openwrt_build/actions/workflows/build.yml) · 单机型或 `all` 并行 |
-| 自动构建 | 每日北京时间 **04:15** 检查主源码或本仓库配置/脚本，有更新才构建 |
+| 手动构建 | 默认 `7dr7299-mtk`；[Run workflow](https://github.com/poiiwe/openwrt_build/actions/workflows/build.yml) · 单机型或 `all` 并行 |
+| 推送构建 | `main` 的 `Config/`、`Scripts/` 或 `build.yml` 更新后，自动编译 `7dr7299-mtk` 并发布 |
+| 自动构建 | 每日北京时间 **04:15** 检查 `7dr7299-mtk` 主源码或本仓库配置/脚本，有更新才构建 |
 | 缓存加速 | 分组 ccache · 精确匹配的 host / 工具链及独立 hostpkg 缓存；下载文件不缓存 |
 | 固件发布 | 同一工作流内默认发布成功机型的 Release；可通过 `publish=false` 关闭 |
 | 版本标识 | LuCI 固件版本显示仓库所有者、北京时间（编译开始）；镜像文件名带机型、同一时间和运行编号 |
@@ -53,9 +54,9 @@ Release 提供固件、完整配置、包清单及校验文件。Actions 日志�
 
 | 入口 | 功能 |
 | :--- | :--- |
-| [Build firmware](https://github.com/WoChen5770/openwrt_build/actions/workflows/build.yml) | 锁定源码与配置、并行编译、筛选成功产物、校验并发布 Release |
-| [Clean old releases and caches](https://github.com/WoChen5770/openwrt_build/actions/workflows/cleanup.yml) | 清理本项目可识别的旧 Release / 标签和缓存；支持手动预览 |
-| [Repository checks](https://github.com/WoChen5770/openwrt_build/actions/workflows/check.yml) | 检查配置、校验脚本和 Actions 语法，不编译固件 |
+| [Build firmware](https://github.com/poiiwe/openwrt_build/actions/workflows/build.yml) | 锁定源码与配置、并行编译、筛选成功产物、校验并发布 Release |
+| [Clean old releases and caches](https://github.com/poiiwe/openwrt_build/actions/workflows/cleanup.yml) | 清理本项目可识别的旧 Release / 标签和缓存；支持手动预览 |
+| [Repository checks](https://github.com/poiiwe/openwrt_build/actions/workflows/check.yml) | 检查配置、校验脚本和 Actions 语法，不编译固件 |
 
 `build.yml` 内部流程为 `plan → compile（机型矩阵）→ publish-plan → publish（成功机型矩阵）`。编译矩阵全部结束后才进入发布阶段；某个机型失败不阻止其他成功机型发布，取消整次运行或关闭 `publish` 时不会启动发布。编译阶段保持只读权限，仅发布阶段具有 Release 写入权限。
 
@@ -91,8 +92,9 @@ Scripts/             构建脚本、插件集成及配套资源
 | 下载文件 | 不缓存 `dl`；每次构建通过 `make download` 并行下载，日志见 `logs/download.log` |
 | host / 工具链缓存 | 按机型、最终配置、相关源码与 runner 环境精确匹配；命中后不重复上传 |
 | hostpkg 缓存 | 独立保存软件包宿主工具，额外校验 feeds、插件、配置与集成脚本 |
-| 7DR7299 MTK 的 Go | 仅 dae / daed 使用锁定的独立 Go 1.27 工具链；其他软件包继续使用上游 Go |
-| MTK 服务 | 不集成 Mesh；daed / honk 已集成，默认不启用 |
+| MTK 服务 | 不集成 Mesh；7DR7299 MTK 仅保留 PassWall / Xray 代理，移除 daed / honk / EasyTier 及其独立编译器 |
+| 7DR7299 MTK 精简 | 移除 Samba / ksmbd / NFS / FTP、磁盘分区与健康工具、存储和 USB 音频扩展；保留 USB 控制器与 USB 网卡驱动 |
+| 双 WAN 与 WireGuard | 7DR7299 MTK 已选中 mwan3 和 WireGuard 内核、工具与 LuCI；首次启动后按实际端口、运营商与密钥配置 |
 
 临时选包示例（可多行，也可用字面量 `\n` 分隔）：
 
