@@ -488,7 +488,7 @@ def apply_kernel_config(tree, profile):
     path.write_text("\n".join(lines) + "\n")
 
 
-def apply_defaults(tree, values, vendor=False, wireless_defaults=None):
+def apply_defaults(tree, values, vendor=False, wireless_defaults=None, disabled_services=()):
     generator = tree / "package/base-files/files/bin/config_generate"
     content, count = re.subn(r"192\.168\.\d+\.\d+", values["lan_ip"], generator.read_text())
     if not count:
@@ -567,10 +567,12 @@ def apply_defaults(tree, values, vendor=False, wireless_defaults=None):
     if vendor:
         # Set packaged defaults, not restored UCI state. The init scripts respect
         # these switches, so a kept-config sysupgrade must not disable services.
-        for relative, options in (
-            ("package/daed/files/daed.config", ("enabled",)),
-            ("package/honk/files/honk.config", ("enabled",)),
+        for service, relative, options in (
+            ("daed", "package/daed/files/daed.config", ("enabled",)),
+            ("honk", "package/honk/files/honk.config", ("enabled",)),
         ):
+            if service not in disabled_services:
+                continue
             path = tree / relative
             content = path.read_text()
             for option in options:
@@ -747,7 +749,9 @@ def prepare(args):
         run("bash", str(private), cwd=tree, env=env)
     remove_qmodem(tree)
     vendor = lock["profile"].get("variant") == "mtk-vendor" or lock["profile"]["source"] == "chasey"
-    apply_defaults(tree, lock["defaults"], vendor, lock["profile"].get("wireless_defaults"))
+    disabled_services = {name for name in ("daed", "honk")
+                         if lock["config"].get("PACKAGE_" + name) in ("y", "m")}
+    apply_defaults(tree, lock["defaults"], vendor, lock["profile"].get("wireless_defaults"), disabled_services)
     apply_kernel_config(tree, lock["profile"])
     customize_luci(tree, lock["defaults"], identity)
     write_json(tree / ".build-identity.json", identity)
@@ -872,7 +876,9 @@ def release_notes(lock, identity=None, config_name="Config-*.txt"):
         notes += "\n> 仅适用于 TP-Link TL-7DR7299 v1。MT76 / MTK 的引导器及分区布局需分别核对，不保证直接互刷。"
         notes += "sysupgrade.itb 用于匹配布局的 OpenWrt 升级；recovery.itb 为恢复镜像，不是原厂首次刷入包；不发布引导器。"
         if profile["variant"] == "mtk-vendor":
-            notes += "闭源版不集成 Mesh / DAWN；daed / honk 默认关闭，启用前验证 HNAT / WARP 兼容性。"
+            notes += "闭源版不集成 Mesh / DAWN。"
+            if any(lock["config"].get("PACKAGE_" + name) in ("y", "m") for name in ("daed", "honk")):
+                notes += "daed / honk 默认关闭，启用前验证 HNAT / WARP 兼容性。"
         notes += "\n"
     notes += "\n<details>\n<summary>源码与文件</summary>\n\n"
     notes += "源码：[" + source["branch"] + " · " + source["commit"][:7] + "](" + repository + "/commit/" + source["commit"] + ")。\n\n"
