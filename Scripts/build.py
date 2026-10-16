@@ -600,6 +600,19 @@ def remove_qmodem(tree):
                 print("Removed QModem: " + str(path.relative_to(tree)))
 
 
+def trim_mtk_vpn_dependency(tree, lock):
+    # This vendor TurboACC recipe bundles WireGuard, although none of its
+    # runtime files use it. Keep acceleration when the MTK profile excludes VPN.
+    if lock["profile_id"] != "7dr7299-mtk" or lock["config"].get("PACKAGE_kmod-wireguard") != "n":
+        return
+    path = tree / "package/mtk/applications/luci-app-turboacc-mtk/Makefile"
+    content, count = re.subn(r"\+kmod-wireguard(?=[\s\\]|$)", "", path.read_text())
+    if count > 1:
+        raise ValueError("Unexpected TurboACC WireGuard dependencies")
+    if count:
+        path.write_text(content)
+
+
 def build_identity(lock):
     started = datetime.now(timezone.utc)
     return dict(repository_owner=lock["repository_owner"],
@@ -748,6 +761,7 @@ def prepare(args):
         env.pop("GITHUB_TOKEN", None)
         run("bash", str(private), cwd=tree, env=env)
     remove_qmodem(tree)
+    trim_mtk_vpn_dependency(tree, lock)
     vendor = lock["profile"].get("variant") == "mtk-vendor" or lock["profile"]["source"] == "chasey"
     disabled_services = {name for name in ("daed", "honk")
                          if lock["config"].get("PACKAGE_" + name) in ("y", "m")}

@@ -20,7 +20,7 @@
 | 超级网关S20P · MT76 | 开源无线 · Mesh · BBR / fq<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [VIKINGYFY / owrt](https://github.com/VIKINGYFY/immortalwrt/tree/owrt) |
 | 超级网关S20P · MTK | 闭源无线 · HNAT / WARP · TurboACC / eQoS<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [chasey-dev / 25.12](https://github.com/chasey-dev/immortalwrt-mt798x-rebase/tree/25.12) |
 | TL-7DR7299 · MT76 | 开源无线 · Mesh / DAWN · BBR / fq<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [VIKINGYFY / owrt](https://github.com/VIKINGYFY/immortalwrt/tree/owrt) |
-| TL-7DR7299 · MTK（默认） | 闭源无线 · HNAT / WARP · TurboACC / eQoS<br>双 WAN（mwan3）· WireGuard · PassWall（Xray-only）· AdGuard Home | [padavanonly / 6.6-mtwifi](https://github.com/padavanonly/immortalwrt-mt798x-6.6/tree/mt798x-mt799x-6.6-mtwifi) |
+| TL-7DR7299 · MTK（默认） | 闭源无线 · HNAT / WARP · TurboACC / eQoS<br>双 WAN（mwan3）· 精简版（无代理 / VPN / AdGuard Home） | [padavanonly / 6.6-mtwifi](https://github.com/padavanonly/immortalwrt-mt798x-6.6/tree/mt798x-mt799x-6.6-mtwifi) |
 | x86-64 | BBR · BIOS / UEFI / VMDK<br>PassWall（Xray-only）· daed / honk · EasyTier · AdGuard Home | [VIKINGYFY / owrt](https://github.com/VIKINGYFY/immortalwrt/tree/owrt) |
 
 ## 默认设置
@@ -92,9 +92,9 @@ Scripts/             构建脚本、插件集成及配套资源
 | 下载文件 | 不缓存 `dl`；每次构建通过 `make download` 并行下载，日志见 `logs/download.log` |
 | host / 工具链缓存 | 按机型、最终配置、相关源码与 runner 环境精确匹配；命中后不重复上传 |
 | hostpkg 缓存 | 独立保存软件包宿主工具，额外校验 feeds、插件、配置与集成脚本 |
-| MTK 服务 | 不集成 Mesh；7DR7299 MTK 仅保留 PassWall / Xray 代理，移除 daed / honk / EasyTier 及其独立编译器 |
-| 7DR7299 MTK 精简 | 移除 Samba / ksmbd / NFS / FTP、磁盘分区与健康工具、非必需存储和 USB 音频扩展；保留 USB 控制器、USB 网卡及闭源 Wi-Fi / TurboACC 必需的 blkid、bonding、Btrfs 内核模块 |
-| 双 WAN 与 WireGuard | 7DR7299 MTK 已选中 mwan3 和 WireGuard 内核、工具与 LuCI；首次启动后按实际端口、运营商与密钥配置 |
+| MTK 服务 | 不集成 Mesh；7DR7299 MTK 不集成 PassWall / Xray、代理规则库、WireGuard、AdGuard Home、daed / honk / EasyTier，不拉取其专用插件源码；准备阶段移除 TurboACC 对 WireGuard 的捆绑依赖，保留硬件加速 |
+| 7DR7299 MTK 精简 | 移除代理 / VPN / 广告过滤、CoreMark / iperf3 测速、Samba / ksmbd / NFS / FTP、磁盘分区与健康工具、非必需存储和 USB 音频扩展；保留 USB 控制器、USB 网卡及闭源 Wi-Fi / TurboACC 必需的 blkid、bonding、Btrfs 内核模块 |
+| 双 WAN | 7DR7299 MTK 已选中 mwan3 和 LuCI 管理界面；首次启动后按实际端口、运营商配置检测与分流策略 |
 
 临时选包示例（可多行，也可用字面量 `\n` 分隔）：
 
